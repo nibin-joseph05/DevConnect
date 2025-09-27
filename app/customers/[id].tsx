@@ -166,6 +166,7 @@ const CustomerDetailsPage: React.FC = () => {
       <Header 
         title="Customer Details" 
         showBackButton
+        showLogout={true}
         rightComponent={
           <Button 
             title="Edit" 

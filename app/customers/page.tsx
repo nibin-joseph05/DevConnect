@@ -123,6 +123,7 @@ const CustomersPage: React.FC = () => {
     <View style={styles.container}>
       <Header 
         title="Customers" 
+        showLogout={true}
         rightComponent={
           <Button 
             title="Add" 

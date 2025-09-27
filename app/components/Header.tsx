@@ -2,6 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../../redux/slices/authSlice';
+import { AppDispatch } from '../../redux/store';
 
 interface HeaderProps {
   title: string;
@@ -10,6 +13,7 @@ interface HeaderProps {
   rightComponent?: React.ReactNode;
   backgroundColor?: string;
   textColor?: string;
+  showLogout?: boolean;
 }
 
 /**
@@ -23,14 +27,25 @@ const Header: React.FC<HeaderProps> = ({
   rightComponent,
   backgroundColor = '#007AFF',
   textColor = '#FFFFFF',
+  showLogout = false,
 }) => {
   const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
 
   const handleBackPress = () => {
     if (onBackPress) {
       onBackPress();
     } else {
       router.back();
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      router.replace('/login' as any);
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   };
 
@@ -53,6 +68,11 @@ const Header: React.FC<HeaderProps> = ({
         </View>
         
         <View style={styles.rightSection}>
+          {showLogout && (
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+              <Ionicons name="log-out-outline" size={24} color={textColor} />
+            </TouchableOpacity>
+          )}
           {rightComponent}
         </View>
       </View>
@@ -88,6 +108,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   backButton: {
+    padding: 8,
+  },
+  logoutButton: {
     padding: 8,
   },
   title: {

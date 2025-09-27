@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearError, registerUser } from '../../redux/slices/authSlice';
+import { clearError, logoutUser, registerUser } from '../../redux/slices/authSlice';
 import { AppDispatch, RootState } from '../../redux/store';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -179,6 +179,18 @@ const RegisterPage: React.FC = () => {
     router.push('/login');
   };
 
+  /**
+   * Handle logout (if user is already logged in)
+   */
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      Alert.alert('Success', 'Logged out successfully!');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <KeyboardAvoidingView 
       style={styles.container} 
@@ -284,6 +296,15 @@ const RegisterPage: React.FC = () => {
               variant="outline"
               size="small"
             />
+            {isAuthenticated && (
+              <Button
+                title="Logout"
+                onPress={handleLogout}
+                variant="danger"
+                size="small"
+                style={styles.logoutButton}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -355,6 +376,9 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 16,
     color: '#6C757D',
+  },
+  logoutButton: {
+    marginTop: 8,
   },
 });
 

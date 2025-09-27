@@ -3,8 +3,9 @@ import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, setUser } from '../redux/slices/authSlice';
+import { logoutUser, setToken, setUser } from '../redux/slices/authSlice';
 import { AppDispatch, RootState } from '../redux/store';
+import Button from './components/Button';
 
 /**
  * Main app entry point
@@ -73,6 +74,18 @@ const HomePage: React.FC = () => {
     }
   }, [isAuthenticated, isLoading, router]);
 
+  /**
+   * Handle logout from loading screen
+   */
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      router.replace('/login' as any);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   // Show loading screen while checking authentication
   if (isLoading) {
     return (
@@ -81,6 +94,13 @@ const HomePage: React.FC = () => {
           <ActivityIndicator size="large" color="#007AFF" />
           <Text style={styles.loadingText}>DevConnect</Text>
           <Text style={styles.loadingSubtext}>Loading your CRM...</Text>
+          <Button
+            title="Logout"
+            onPress={handleLogout}
+            variant="danger"
+            size="small"
+            style={styles.logoutButton}
+          />
         </View>
       </View>
     );
@@ -112,6 +132,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6C757D',
     textAlign: 'center',
+  },
+  logoutButton: {
+    marginTop: 20,
   },
 });
 

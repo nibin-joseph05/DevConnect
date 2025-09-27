@@ -193,6 +193,7 @@ const LeadFormPage: React.FC = () => {
       <Header 
         title={isEditing ? 'Edit Lead' : 'Add Lead'} 
         showBackButton 
+        showLogout={true}
         onBackPress={handleCancel}
       />
       

@@ -151,6 +151,7 @@ const LeadsPage: React.FC = () => {
       <Header 
         title={customerId ? "Customer Leads" : "All Leads"} 
         showBackButton
+        showLogout={true}
         rightComponent={
           <Button 
             title="Add" 

@@ -176,6 +176,7 @@ const CustomerFormPage: React.FC = () => {
       <Header 
         title={isEditing ? 'Edit Customer' : 'Add Customer'} 
         showBackButton 
+        showLogout={true}
         onBackPress={handleCancel}
       />
       
